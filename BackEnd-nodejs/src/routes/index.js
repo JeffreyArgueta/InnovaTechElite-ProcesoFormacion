@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-// const modelsRoutes = require('./models');
+const modelsRoutes = require('./models');
 
 router.get('/', (req, res) => {
   res.json({
@@ -11,6 +11,6 @@ router.get('/', (req, res) => {
   });
 });
 
-// router.use('/', modelsRoutes);
+router.use('/models', modelsRoutes);
 
 module.exports = router;
