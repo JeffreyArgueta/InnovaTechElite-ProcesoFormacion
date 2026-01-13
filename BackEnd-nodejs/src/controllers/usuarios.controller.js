@@ -41,7 +41,7 @@ const createUsuario = async (req, res, next) => {
   try {
     const usuario = await usuariosService.createUsuario(req.body);
     logger.info(`Handled POST /usuarios request`);
-    res.status(200).json({
+    res.status(201).json({
       success: true,
       data: usuario
     });
