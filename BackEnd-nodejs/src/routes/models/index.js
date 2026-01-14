@@ -1,7 +1,7 @@
 const express = require('express');
 
 const usuariosRoutes = require('./usuarios.routes');
-const detalleOrdenesRoutes = require('./detalleOrdenes.routes');
+const detalleOrdenesRoutes = require('./detalleOrden.routes');
 
 const router = express.Router();
 

@@ -1,9 +1,9 @@
-const detalleOrdenService = require('../services/detalleOrdenes.service');
+const detalleOrdenService = require('../services/detalleOrden.service');
 const logger = require('../utils/logger');
 
-const getDetallesOrdenByOrden = async (req, res, next) => {
+const getDetalleOrdenByOrden = async (req, res, next) => {
   try {
-    const detalles = await detalleOrdenService.getDetallesPorOrden(req.params.id_orden);
+    const detalles = await detalleOrdenService.getDetalleOrdenByOrden(req.params.id_orden);
     logger.info(`Handled GET /ordenes/detalles/${req.params.id_orden} request`);
     res.status(200).json({
       success: true,
@@ -94,7 +94,7 @@ const deleteDetalleOrdenes = async (req, res, next) => {
 };
 
 module.exports = {
-  getDetallesOrdenByOrden,
+  getDetalleOrdenByOrden,
   getDetalleOrdenById,
   createDetalleOrdenes,
   updateDetalleOrdenes,
