@@ -17,7 +17,7 @@ const getUsuarios = async () => {
 const getUsuarioById = async (id) => {
   try {
     const usuario = await Usuarios.findByPk(id, {
-      attributes: ['id_usuario', 'nombre_completo', 'correo', 'estado']
+      attributes: ['nombre_completo', 'correo', 'estado']
     });
     if (!usuario) {
       const error = new Error('Usuario no encontrado');
@@ -80,7 +80,7 @@ const deleteUsuario = async (id) => {
     const usuario = await Usuarios.findByPk(id, { transaction });
 
     if (!usuario) {
-      const error = new Error('Usuario no encontrado para actualizar');
+      const error = new Error('Usuario no encontrado para eliminar');
       error.status = 404;
       throw error;
     }

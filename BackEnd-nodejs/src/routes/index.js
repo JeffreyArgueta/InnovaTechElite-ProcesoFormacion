@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const modelsRoutes = require('./models');
+const usuariosRoutes = require('./models/usuarios.routes');
+const ordenesRoutes = require('./models/ordenes.routes');
 
 router.get('/', (req, res) => {
   res.json({
@@ -11,6 +12,7 @@ router.get('/', (req, res) => {
   });
 });
 
-router.use('/models', modelsRoutes);
+router.use('/usuarios', usuariosRoutes);
+router.use('/ordenes', ordenesRoutes);
 
 module.exports = router;

@@ -5,8 +5,8 @@ const router = express.Router();
 
 router.get('/orden/:id_orden', detalleOrdenesController.getDetalleOrdenByOrden);
 router.get('/:id_detalle', detalleOrdenesController.getDetalleOrdenById);
-router.post('/', detalleOrdenesController.createDetalleOrdenes);
-router.put('/:id_detalle', detalleOrdenesController.updateDetalleOrdenes);
-router.delete('/:id_detalle', detalleOrdenesController.deleteDetalleOrdenes);
+router.post('/', detalleOrdenesController.createDetalleOrden);
+router.put('/:id_detalle', detalleOrdenesController.updateDetalleOrden);
+router.delete('/:id_detalle', detalleOrdenesController.deleteDetalleOrden);
 
 module.exports = router;

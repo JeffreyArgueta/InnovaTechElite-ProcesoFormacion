@@ -15,18 +15,18 @@ const getDetalleOrdenByOrden = async (idOrden) => {
   }
 };
 
-const getDetalleOrdenById = async (idDetalle) => {
+const getDetalleOrdenById = async (id) => {
   try {
-    const detalle = await DetalleOrden.findByPk(idDetalle);
+    const detalle = await DetalleOrden.findByPk(id);
     if (!detalle) {
       const error = new Error('Detalle de Orden no encontrado');
       error.status = 404;
       throw error;
     }
-    logger.info('Detalles de la Orden obtenido satisfactoriamente', { detalle_id: idDetalle });
+    logger.info('Detalles de la Orden obtenido satisfactoriamente', { detalle_id: id });
     return detalle;
   } catch (error) {
-    logger.error('Error obteniendo detalle de la orden', { detalle_id: idDetalle, error: error.message });
+    logger.error('Error obteniendo detalle de la orden', { detalle_id: id, error: error.message });
     throw error;
   }
 };
@@ -119,7 +119,7 @@ const updateDetalleOrden = async (idDetalle, { id_orden, nombre_juego, cantidad,
 const deleteDetalleOrden = async (idDetalle) => {
   const transaction = await sequelize.transaction();
   try {
-    const detalle = await DetalleOrden.findByPk(idDetalle);
+    const detalle = await DetalleOrden.findByPk(idDetalle, { transaction });
     if (!detalle) {
       const error = new Error('Detalle de Orden no encontrado');
       error.status = 404;

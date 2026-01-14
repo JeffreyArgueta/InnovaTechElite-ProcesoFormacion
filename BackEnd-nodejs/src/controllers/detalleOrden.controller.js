@@ -37,10 +37,9 @@ const getDetalleOrdenById = async (req, res, next) => {
   }
 };
 
-const createDetalleOrdenes = async (req, res, next) => {
+const createDetalleOrden = async (req, res, next) => {
   try {
-    const detalle = await detalleOrdenService.createDetalleOrdenes(req.body);
-
+    const detalle = await detalleOrdenService.createDetalleOrden(req.body);
     logger.info(`Handled POST /ordenes/detalles request`);
     res.status(201).json({
       success: true,
@@ -56,9 +55,9 @@ const createDetalleOrdenes = async (req, res, next) => {
   }
 };
 
-const updateDetalleOrdenes = async (req, res, next) => {
+const updateDetalleOrden = async (req, res, next) => {
   try {
-    const detalle = await detalleOrdenService.updateDetalleOrdenes(req.params.id_detalle, req.body);
+    const detalle = await detalleOrdenService.updateDetalleOrden(req.params.id_detalle, req.body);
     logger.info(`Handled PUT /ordenes/detalles/${req.params.id_detalle} request`);
     res.status(200).json({
       success: true,
@@ -74,9 +73,9 @@ const updateDetalleOrdenes = async (req, res, next) => {
   }
 };
 
-const deleteDetalleOrdenes = async (req, res, next) => {
+const deleteDetalleOrden = async (req, res, next) => {
   try {
-    const detalle = await detalleOrdenService.deleteDetalleOrdenes(req.params.id_detalle);
+    const detalle = await detalleOrdenService.deleteDetalleOrden(req.params.id_detalle);
     logger.info(`Handled DELETE /ordenes/detalles/${req.params.id_detalle} request`);
     res.status(200).json({
       success: true,
@@ -96,7 +95,7 @@ const deleteDetalleOrdenes = async (req, res, next) => {
 module.exports = {
   getDetalleOrdenByOrden,
   getDetalleOrdenById,
-  createDetalleOrdenes,
-  updateDetalleOrdenes,
-  deleteDetalleOrdenes
+  createDetalleOrden,
+  updateDetalleOrden,
+  deleteDetalleOrden
 };
