@@ -10,7 +10,7 @@ const getUsuarios = async (req, res, next) => {
       data: usuarios
     });
   } catch (error) {
-    res.status(error.status).json({
+    res.status(error.status || 500).json({
       success: false,
       message: error.message,
       data: null
@@ -28,7 +28,7 @@ const getUsuarioById = async (req, res, next) => {
       data: usuario
     });
   } catch (error) {
-    res.status(error.status).json({
+    res.status(error.status || 500).json({
       success: false,
       message: error.message,
       data: null
@@ -46,7 +46,7 @@ const createUsuario = async (req, res, next) => {
       data: usuario
     });
   } catch (error) {
-    res.status(error.status).json({
+    res.status(error.status || 500).json({
       success: false,
       message: error.message,
       data: null
@@ -64,7 +64,7 @@ const updateUsuario = async (req, res, next) => {
       data: usuario
     });
   } catch (error) {
-    res.status(error.status).json({
+    res.status(error.status || 500).json({
       success: false,
       message: error.message,
       data: null
@@ -84,7 +84,7 @@ const deleteUsuario = async (req, res, next) => {
       data: usuario
     });
   } catch (error) {
-    res.status(error.status).json({
+    res.status(error.status || 500).json({
       success: false,
       message: error.message,
       data: null

@@ -10,7 +10,7 @@ const getDetalleOrdenByOrden = async (req, res, next) => {
       data: detalles
     });
   } catch (error) {
-    res.status(error.status).json({
+    res.status(error.status || 500).json({
       success: false,
       message: error.message,
       data: null
@@ -28,7 +28,7 @@ const getDetalleOrdenById = async (req, res, next) => {
       data: detalle
     });
   } catch (error) {
-    res.status(error.status).json({
+    res.status(error.status || 500).json({
       success: false,
       message: error.message,
       data: null
@@ -46,7 +46,7 @@ const createDetalleOrden = async (req, res, next) => {
       data: detalle,
     });
   } catch (error) {
-    res.status(error.status).json({
+    res.status(error.status || 500).json({
       success: false,
       message: error.message,
       data: null
@@ -64,7 +64,7 @@ const updateDetalleOrden = async (req, res, next) => {
       data: detalle,
     });
   } catch (error) {
-    res.status(error.status).json({
+    res.status(error.status || 500).json({
       success: false,
       message: error.message,
       data: null
@@ -83,7 +83,7 @@ const deleteDetalleOrden = async (req, res, next) => {
       data: detalle
     });
   } catch (error) {
-    res.status(error.status).json({
+    res.status(error.status || 500).json({
       success: false,
       message: error.message,
       data: null

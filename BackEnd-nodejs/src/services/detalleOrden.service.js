@@ -42,7 +42,7 @@ const createDetalleOrden = async ({ id_orden, nombre_juego, cantidad, precio_uni
     }
 
     const subtotal = cantidad * precio_unitario;
-    if (subtotal > 0.01) {
+    if (subtotal < 0.01) {
       throw new Error('Error el subtotal no es mayor a 0');
     }
 
@@ -63,10 +63,10 @@ const createDetalleOrden = async ({ id_orden, nombre_juego, cantidad, precio_uni
   }
 };
 
-const updateDetalleOrden = async (idDetalle, { id_orden, nombre_juego, cantidad, precio_unitario }) => {
+const updateDetalleOrden = async (id, { id_orden, nombre_juego, cantidad, precio_unitario }) => {
   const transaction = await sequelize.transaction();
   try {
-    const detalle = await DetalleOrden.findByPk(idDetalle, { transaction });
+    const detalle = await DetalleOrden.findByPk(id, { transaction });
     if (!detalle) {
       const error = new Error('Detalle de Orden no encontrado');
       error.status = 404;
@@ -83,17 +83,17 @@ const updateDetalleOrden = async (idDetalle, { id_orden, nombre_juego, cantidad,
       }
     }
 
+    let subtotal = detalle.subtotal;
+
     if (cantidad || precio_unitario) {
       cantidad = cantidad || detalle.cantidad;
       precio_unitario = precio_unitario || detalle.precio_unitario;
-      const subtotal = cantidad * precio_unitario;
+      subtotal = cantidad * precio_unitario;
 
-      if (subtotal > 0.01) {
+      if (subtotal < 0.01) {
         throw new Error('Error el nuevo subtotal no es mayor a 0');
       }
     }
-
-    nombre_juego = nombre_juego || detalle.nombre_juego;
 
     const nuevoDetalle = await detalle.update(
       { id_orden, nombre_juego, cantidad, precio_unitario, subtotal },
@@ -107,7 +107,7 @@ const updateDetalleOrden = async (idDetalle, { id_orden, nombre_juego, cantidad,
     }
 
     await transaction.commit();
-    logger.info('Detalle de la Orden actualizado satisfactoriamente', { detalle_id: idDetalle });
+    logger.info('Detalle de la Orden actualizado satisfactoriamente', { detalle_id: id });
     return nuevoDetalle;
   } catch (error) {
     await transaction.rollback();
@@ -116,10 +116,10 @@ const updateDetalleOrden = async (idDetalle, { id_orden, nombre_juego, cantidad,
   }
 };
 
-const deleteDetalleOrden = async (idDetalle) => {
+const deleteDetalleOrden = async (id) => {
   const transaction = await sequelize.transaction();
   try {
-    const detalle = await DetalleOrden.findByPk(idDetalle, { transaction });
+    const detalle = await DetalleOrden.findByPk(id, { transaction });
     if (!detalle) {
       const error = new Error('Detalle de Orden no encontrado');
       error.status = 404;
@@ -132,7 +132,7 @@ const deleteDetalleOrden = async (idDetalle) => {
     await updateOrdenTotal(idOrden, transaction);
 
     await transaction.commit();
-    logger.info('Detalle de la Orden eliminado satisfactoriamente', { detalle_id: idDetalle });
+    logger.info('Detalle de la Orden eliminado satisfactoriamente', { detalle_id: id });
     return detalle;
   } catch (error) {
     await transaction.rollback();

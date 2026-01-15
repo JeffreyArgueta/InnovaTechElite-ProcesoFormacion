@@ -10,7 +10,7 @@ const getOrdenes = async (req, res, next) => {
       data: ordenes
     });
   } catch (error) {
-    res.status(error.status).json({
+    res.status(error.status || 500).json({
       success: false,
       message: error.message,
       data: null
@@ -28,7 +28,7 @@ const getOrdenById = async (req, res, next) => {
       data: orden
     });
   } catch (error) {
-    res.status(error.status).json({
+    res.status(error.status || 500).json({
       success: false,
       message: error.message,
       data: null
@@ -46,7 +46,7 @@ const createOrden = async (req, res, next) => {
       data: orden,
     });
   } catch (error) {
-    res.status(error.status).json({
+    res.status(error.status || 500).json({
       success: false,
       message: error.message,
       data: null
@@ -64,7 +64,7 @@ const updateOrden = async (req, res, next) => {
       data: orden,
     });
   } catch (error) {
-    res.status(error.status).json({
+    res.status(error.status || 500).json({
       success: false,
       message: error.message,
       data: null
@@ -83,7 +83,7 @@ const deleteOrden = async (req, res, next) => {
       data: orden
     });
   } catch (error) {
-    res.status(error.status).json({
+    res.status(error.status || 500).json({
       success: false,
       message: error.message,
       data: null

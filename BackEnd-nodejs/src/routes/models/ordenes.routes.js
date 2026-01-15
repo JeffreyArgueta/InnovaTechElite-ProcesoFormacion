@@ -5,10 +5,10 @@ const detalleOrdenesRoutes = require('./detalleOrden.routes');
 const router = express.Router();
 
 router.get('/', ordenesController.getOrdenes);
-router.get('/:id_usuario', ordenesController.getOrdenById);
+router.get('/:id_orden', ordenesController.getOrdenById);
 router.post('/', ordenesController.createOrden);
-router.put('/:id_usuario', ordenesController.updateOrden);
-router.delete('/:id_usuario', ordenesController.deleteOrden);
+router.put('/:id_orden', ordenesController.updateOrden);
+router.delete('/:id_orden', ordenesController.deleteOrden);
 
 router.use('/detalles', detalleOrdenesRoutes);
 

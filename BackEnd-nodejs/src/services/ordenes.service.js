@@ -4,8 +4,8 @@ const logger = require('../utils/logger');
 const getOrdenes = async () => {
   try {
     const ordenes = await Ordenes.findAll({
-      attributes: ['id_orden', 'nombre_completo', 'fecha_orden', 'total'],
-      include: [{ model: Usuarios, attributes: ['nombre_completo']}]
+      attributes: ['id_orden', 'fecha_orden', 'total'],
+      include: [{ model: Usuarios, attributes: ['nombre_completo'] }]
     });
     logger.info('Ordenes obtenidas satisfactoriamente', { count: ordenes.length });
     return ordenes;
@@ -17,8 +17,8 @@ const getOrdenes = async () => {
 const getOrdenById = async (id) => {
   try {
     const orden = await Ordenes.findByPk(id, {
-      attributes: ['id_orden', 'nombre_completo', 'fecha_orden', 'total'],
-      include: [{ model: Usuarios, attributes: ['nombre_completo']}]
+      attributes: ['id_orden', 'fecha_orden', 'total'],
+      include: [{ model: Usuarios, attributes: ['nombre_completo'] }]
     });
     if (!orden) {
       const error = new Error('Orden no encontrada');
@@ -82,6 +82,7 @@ const updateOrden = async (id, { id_usuario }) => {
 
     await transaction.commit();
     logger.info('Orden actualizada satisfactoriamente', { orden_id: id });
+    return orden;
   } catch (error) {
     await transaction.rollback();
     logger.error('Error al actualizar Orden', { error: error.message });
@@ -102,7 +103,7 @@ const deleteOrden = async (id) => {
     await orden.destroy({ transaction });
     await transaction.commit();
     logger.info('Orden eliminada satisfactoriamente', { orden_id: id });
-    return detalle;
+    return orden;
   } catch (error) {
     await transaction.rollback();
     logger.error('Error al eliminar Orden', { error: error.message });
