@@ -6,6 +6,10 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 const requiredEnvVars = [
   'DB_URI',
   'DB_DIALECT',
+  'GOOGLE_CLIENT_ID',
+  'GOOGLE_CLIENT_SECRET',
+  'GOOGLE_REDIRECT_URI',
+  'JWT_SECRET'
 ];
 
 const missingEnvVar = requiredEnvVars.filter((envVar) => !process.env[envVar]);
@@ -18,5 +22,9 @@ module.exports = {
   NODE_ENV: process.env.NODE_ENV || 'development',
   PORT: parseInt(process.env.PORT, 10) || 3000,
   DB_URI: process.env.DB_URI,
-  DB_DIALECT: process.env.DB_DIALECT
+  DB_DIALECT: process.env.DB_DIALECT,
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+  GOOGLE_REDIRECT_URI: process.env.GOOGLE_REDIRECT_URI,
+  JWT_SECRET: process.env.JWT_SECRET
 }

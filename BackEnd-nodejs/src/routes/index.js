@@ -3,6 +3,7 @@ const router = express.Router();
 
 const usuariosRoutes = require('./models/usuarios.routes');
 const ordenesRoutes = require('./models/ordenes.routes');
+const authRoutes = require('./auth');
 
 router.get('/', (req, res) => {
   res.json({
@@ -14,5 +15,6 @@ router.get('/', (req, res) => {
 
 router.use('/usuarios', usuariosRoutes);
 router.use('/ordenes', ordenesRoutes);
+router.use('/auth', authRoutes);
 
 module.exports = router;
