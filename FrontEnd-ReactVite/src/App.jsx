@@ -1,22 +1,15 @@
 import './App.css'
-
-const peliculas = ["pelicula1", "pelicula2", "pelicula3"]
-
-const htmlPeliculas = peliculas.map(pelicula => {
-  return <p key={pelicula}>{pelicula}</p>
-})
+import UseState from './components/UseState'
+import Map from './components/Map'
+import Map2 from './components/Map2'
 
 function App() {
   return (
     <>
       <div>
-        <h1>renderizar listas</h1>
-
-        {/* {peliculas.map(pelicula => {
-          return <p key={pelicula}>{pelicula}</p>
-        })} */}
-
-        {htmlPeliculas}
+        {/* <UseState></UseState> */}
+        {/* <Map></Map> */}
+        <Map2></Map2>
       </div>
     </>
   )
