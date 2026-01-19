@@ -1,5 +1,7 @@
 import './App.css'
 import { useState } from "react";
+
+
 import UseState from './components/UseState'
 import Map from './components/Map'
 import Map2 from './components/Map2'
@@ -9,7 +11,7 @@ import Hijo2 from './components/Props2'
 import CompHermano from './components/CompHermano'
 import UseEffect from './components/useEffect'
 import FechApi from './components/FechApi'
-
+import Formularios from './components/Formularios.jsx'
 
 function App() {
   // const [displayName, setDisplayName] = useState("");
@@ -17,7 +19,7 @@ function App() {
   //   setDisplayName(name);
   // }
 
-  const [mostrarHijo, setMostrarHijo] = useState(true)
+  // const [mostrarHijo, setMostrarHijo] = useState(true)
 
   return (
     <>
@@ -33,7 +35,11 @@ function App() {
         {/* <button onClick={()=> setMostrarHijo(!mostrarHijo)}>mostrar hijo</button>
         {mostrarHijo && <UseEffect></UseEffect>} */}
 
-        <FechApi></FechApi>
+        {/* <FechApi></FechApi> */}
+
+        {/* <Formularios></Formularios> */}
+
+        <Router></Router>
       </div>
     </>
   )

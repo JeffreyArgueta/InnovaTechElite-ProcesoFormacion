@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useEffect } from "react";
+import '../Styles/FechApi.css'
 
 function FechApi() {
     const [usuarios, setUsuarios] = useState([]);
@@ -17,8 +18,8 @@ function FechApi() {
     const HTMLusuarios = usuarios.map((usuario) => {
         return (
 
-            <div key={usuario.id}>
-                <h3>{usuario.name}</h3>
+            <div key={usuario.id} className="FechApiContenedordenombres">
+                <h3 className="FechApiUsuarios">{usuario.name}</h3>
             </div>
 
         )
@@ -26,8 +27,7 @@ function FechApi() {
 
     return (
         <>
-            <h1>peticion a una api</h1>
-            <p>______________</p>
+            <h1 className="FechApititulo">peticion a una api</h1>
             {HTMLusuarios}
         </>
     )
