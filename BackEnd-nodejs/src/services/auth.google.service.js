@@ -1,6 +1,6 @@
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
-const { Usuarios, sequelize } = require('../models'); // ajusta ruta
+const { Usuarios, sequelize } = require('../models');
 const {
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
@@ -15,53 +15,51 @@ const client = new OAuth2Client(
   GOOGLE_REDIRECT_URI
 );
 
-// Scopes mínimos recomendados
 const SCOPES = ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'];
 
 // 1. Obtener URL de autorización (redirigir al usuario)
 const getGoogleAuthUrl = () => {
   try {
     const url = client.generateAuthUrl({
-      access_type: 'offline',           // para obtener refresh_token si lo necesitas
+      access_type: 'offline',
       scope: SCOPES,
-      prompt: 'select_account',         // o 'consent' / 'login'
+      prompt: 'select_account'
     });
     logger.info('URL de autorización Google generada');
     return url;
   } catch (error) {
-    logger.error('Error generando URL Google', { error: error.message });
-    const err = new Error('Error generando URL de autorización');
+    logger.error('Error obteniendo URL Google', { error: error.message });
+    const err = new Error('Error obteniendo URL Google');
     err.status = 500;
     throw err;
   }
 };
 
-// 2. Intercambiar código por tokens y obtener info del usuario
+// 2. Intercambiar código por token y obtener información del usuario
 const verifyGoogleCode = async (code) => {
   try {
     const { tokens } = await client.getToken({
       code,
-      redirect_uri: GOOGLE_REDIRECT_URI,
+      redirect_uri: GOOGLE_REDIRECT_URI
     });
 
     client.setCredentials(tokens);
 
     const ticket = await client.verifyIdToken({
       idToken: tokens.id_token,
-      audience: GOOGLE_CLIENT_ID,
+      audience: GOOGLE_CLIENT_ID
     });
 
     const payload = ticket.getPayload();
 
-    logger.info('Código Google verificado', { email: payload.email });
+    logger.info('Código Google verificado', { correo: payload.email });
 
     return {
-      googleId: payload.sub,                  // ID único de Google
+      googleId: payload.sub,
       email: payload.email,
-      name: payload.name || `${payload.given_name || ''} ${payload.family_name || ''}`.trim(),
-      picture: payload.picture || null,
+      name: payload.name,
       accessToken: tokens.access_token,
-      refreshToken: tokens.refresh_token || null, // solo la primera vez
+      refreshToken: tokens.refresh_token || null
     };
   } catch (error) {
     logger.error('Error verificando código Google', { error: error.message });
@@ -71,16 +69,17 @@ const verifyGoogleCode = async (code) => {
   }
 };
 
-// 3. Generar JWT propio
-const generateJwtToken = (user) => {
+// 3. Generar JWT del usuario
+const generateJwtToken = (usuario) => {
   try {
     const payload = {
-      id: user.id_usuario,
-      email: user.correo,
-      name: user.nombre_completo,
+      id: usuario.id_usuario,
+      email: usuario.correo,
+      name: usuario.nombre_completo
     };
+
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
-    logger.info('JWT generado', { user_id: user.id_usuario });
+    logger.info('JWT generado', { usuario_id: usuario.id_usuario });
     return token;
   } catch (error) {
     logger.error('Error generando JWT', { error: error.message });
@@ -96,11 +95,11 @@ const loginWithGoogle = async (code) => {
 
     const usuario = await Usuarios.findOne({
       where: { correo: googleData.email },
-      transaction,
+      transaction
     });
 
     if (!usuario) {
-      const error = new Error('Usuario no encontrado. Regístrate primero.');
+      const error = new Error('Usuario no encontrado. Registrate primero');
       error.status = 404;
       throw error;
     }
@@ -108,20 +107,18 @@ const loginWithGoogle = async (code) => {
     const token = generateJwtToken(usuario);
     await transaction.commit();
 
-    logger.info('Login Google exitoso', { user_id: usuario.id_usuario });
-
+    logger.info('Login con Google exitoso', { usuario_email: usuario.correo });
     return {
       usuario: {
         id: usuario.id_usuario,
         nombre_completo: usuario.nombre_completo,
-        correo: usuario.correo,
-        proveedor_login: 'Google',
+        correo: usuario.correo
       },
       token,
-    };
+    }
   } catch (error) {
     await transaction.rollback();
-    logger.error('Error en login Google', { error: error.message });
+    logger.error('Error en login con Google', { error: error.message });
     throw error;
   }
 };
@@ -132,54 +129,104 @@ const registerWithGoogle = async (code) => {
   try {
     const googleData = await verifyGoogleCode(code);
 
-    // Verificar si ya existe por email
+    // Verificar si ya existe el usuario por email
     let usuario = await Usuarios.findOne({
       where: { correo: googleData.email },
-      transaction,
-    });
+      transaction
+    })
 
     if (usuario) {
-      const error = new Error('El correo ya está registrado. Inicia sesión.');
+      const error = new Error('Usuario ya está registrado. Inicia sesión');
       error.status = 409;
       throw error;
     }
 
-    // Verificar si ya existe por id_google (por si cambió email)
+    // Verificar si ya existe el id_google (por si cambió correo);
     usuario = await Usuarios.findOne({
       where: { id_microsoft: googleData.googleId },
-      transaction,
-    });
+      transaction
+    })
 
     if (usuario) {
-      const error = new Error('Cuenta Google ya vinculada a otro usuario.');
+      const error = new Error('Cuenta Google ya vinculada a otro usuario');
       error.status = 409;
       throw error;
     }
 
-    // Crear nuevo usuario
     usuario = await Usuarios.create({
-      nombre_completo: googleData.name || 'Usuario Google',
+      nombre_completo: googleData.name,
       correo: googleData.email,
       proveedor_login: 'Google',
-      id_microsoft: googleData.googleId,     // ← campo renombrado
+      id_microsoft: googleData.googleId
     }, { transaction });
 
     const token = generateJwtToken(usuario);
     await transaction.commit();
 
-    logger.info('Registro con Google exitoso', { user_id: usuario.id_usuario });
+    logger.info('Registro con Google exitoso', { usuario_email: usuario.correo });
 
     return {
       usuario: {
         id: usuario.id_usuario,
         nombre_completo: usuario.nombre_completo,
-        correo: usuario.correo,
+        correo: usuario.correo
       },
-      token,
-    };
+      token
+    }
   } catch (error) {
     await transaction.rollback();
-    logger.error('Error en registro Google', { error: error.message });
+    logger.error('Error en registro con Google', { error: error.message });
+    throw error;
+  }
+};
+
+const authenticateWithGoogle = async (code) => {
+  const transaction = await sequelize.transaction();
+  try {
+    const googleData = await verifyGoogleCode(code);
+
+    // Verificar si ya existe el usuario por email
+    let usuario = await Usuarios.findOne({
+      where: { correo: googleData.email },
+      transaction
+    });
+
+    // Búsqueda adicional por googleId (por si cambió de email)
+    if (!usuario) {
+      usuario = await Usuarios.findOne({
+        where: { id_microsoft: googleData.googleId },
+        transaction
+      });
+    }
+
+    // registro si no existe
+    if (!usuario) {
+      usuario = await Usuarios.create({
+        nombre_completo: googleData.name,
+        correo: googleData.email,
+        proveedor_login: 'Google',
+        id_microsoft: googleData.googleId
+      }, { transaction });
+    }
+
+    // Si llegamos aquí → tenemos un usuario (existente o recién creado)
+
+    const token = generateJwtToken(usuario);
+    await transaction.commit();
+
+    logger.info('Autenticación con Google exitosa', { usuario_email: usuario.correo });
+
+    return {
+      usuario: {
+        id: usuario.id_usuario,
+        nombre_completo: usuario.nombre_completo,
+        correo: usuario.correo
+      },
+      token
+    }
+  } catch (error) {
+    await transaction.rollback();
+    logger.error('Error en autenticación con Google', { error: error.message });
     throw error;
   }
 };
@@ -188,4 +235,5 @@ module.exports = {
   getGoogleAuthUrl,
   loginWithGoogle,
   registerWithGoogle,
+  authenticateWithGoogle
 };

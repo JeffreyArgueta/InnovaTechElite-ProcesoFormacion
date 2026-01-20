@@ -1,11 +1,11 @@
-const authGoogleService = require('../services/auth.google.service');
+const authMicrosoftService = require('../services/auth.microsoft.service');
 const logger = require('../utils/logger');
 const { NODE_ENV } = require('../config/environment');
 
-const getGoogleAuthUrl = async (req, res, next) => {
+const getMicrosoftAuthUrl = async (req, res, next) => {
   try {
-    const url = await authGoogleService.getGoogleAuthUrl();
-    logger.info('Handled GET /auth/google/url request');
+    const url = await authMicrosoftService.getMicrosoftAuthUrl();
+    logger.info('Handled GET /auth/microsoft/url request');
     res.status(200).json({
       success: true,
       data: { url }
@@ -20,7 +20,7 @@ const getGoogleAuthUrl = async (req, res, next) => {
   }
 };
 
-const loginWithGoogle = async (req, res, next) => {
+const loginWithMicrosoft = async (req, res, next) => {
   try {
     const { code } = req.body;
 
@@ -32,33 +32,33 @@ const loginWithGoogle = async (req, res, next) => {
       });
     }
 
-    const { usuario, token } = await authGoogleService.loginWithGoogle(code);
+    const { usuario, token } = await authMicrosoftService.loginWithMicrosoft(code);
 
     res.cookie('auth_token', token, {
       httpOnly: true,
       secure: NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 24 * 60 * 60 * 1000 // 1 day
+      maxAge: 24 * 60 * 60 * 1000 // 1 día
     });
 
-    logger.info('Handled POST /auth/google/login request', { usuario_id: usuario.id });
+    logger.info('Handled POST /auth/microsoft/login request', { usuario_id: usuario.id });
 
     res.status(200).json({
       success: true,
-      message: 'Inicio de sesión con Google existoso',
+      message: 'Inicio de sesión con Microsoft exitoso',
       data: { usuario }
     });
   } catch (error) {
     res.status(error.status || 500).json({
       success: false,
-      message: error.message || 'Error al iniciar sesión con Google',
+      message: error.message || 'Error al iniciar sesión con Microsoft',
       data: null
     });
     next(error);
   }
 };
 
-const registerWithGoogle = async (req, res, next) => {
+const registerWithMicrosoft = async (req, res, next) => {
   try {
     const { code } = req.body;
 
@@ -70,33 +70,33 @@ const registerWithGoogle = async (req, res, next) => {
       });
     }
 
-    const { usuario, token } = await authGoogleService.registerWithGoogle(code);
+    const { usuario, token } = await authMicrosoftService.registerWithMicrosoft(code);
 
     res.cookie('auth_token', token, {
       httpOnly: true,
       secure: NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 24 * 60 * 60 * 1000 // 1 day
+      maxAge: 24 * 60 * 60 * 1000 // 1 día
     });
 
-    logger.info('Handled POST /auth/google/register request', { usuario_id: usuario.id });
+    logger.info('Handled POST /auth/microsoft/register request', { usuario_id: usuario.id });
 
     res.status(201).json({
       success: true,
-      message: 'Registro con Google existoso',
+      message: 'Registro con Microsoft exitoso',
       data: { usuario }
     });
   } catch (error) {
     res.status(error.status || 500).json({
       success: false,
-      message: error.message || 'Error al registrar con Google',
+      message: error.message || 'Error al registrar con Microsoft',
       data: null
     });
     next(error);
   }
 };
 
-const authenticateWithGoogle = async (req, res, next) => {
+const authenticateWithMicrosoft = async (req, res, next) => {
   try {
     const { code } = req.body;
 
@@ -108,7 +108,7 @@ const authenticateWithGoogle = async (req, res, next) => {
       });
     }
 
-    const { usuario, token } = await authGoogleService.authenticateWithGoogle(code);
+    const { usuario, token } = await authMicrosoftService.authenticateWithMicrosoft(code);
 
     res.cookie('auth_token', token, {
       httpOnly: true,
@@ -117,24 +117,24 @@ const authenticateWithGoogle = async (req, res, next) => {
       maxAge: 24 * 60 * 60 * 1000 // 1 day
     });
 
-    logger.info('Handled POST /auth/google/authenticate request', { usuario_id: usuario.id });
+    logger.info('Handled POST /auth/microsoft/authenticate request', { usuario_id: usuario.id });
 
     res.status(201).json({
       success: true,
-      message: 'Autenticación con Google existosa',
+      message: 'Autenticación con Microsoft existosa',
       data: { usuario }
     });
   } catch (error) {
     res.status(error.status || 500).json({
       success: false,
-      message: error.message || 'Error al autenticar con Google',
+      message: error.message || 'Error al autenticar con Microsoft',
       data: null
     });
     next(error);
   }
 };
 
-const getGoogleCallback = async (req, res, next) => {
+const getMicrosoftCallback = async (req, res, next) => {
   try {
     const { code } = req.query;
 
@@ -146,18 +146,18 @@ const getGoogleCallback = async (req, res, next) => {
       });
     }
 
-    logger.info('Handled GET /auth/google/callback request');
+    logger.info('Handled GET /auth/microsoft/callback request');
 
     res.status(200).json({
       success: true,
-      message: 'Código de autorización recibido correctamente desde Google',
+      message: 'Código de autorización recibido correctamente desde Microsoft',
       code: code
     });
   } catch (error) {
-    logger.error('Error en callback Google', { error: error.message });
+    logger.error('Error en callback Microsoft', { error: error.message });
     res.status(error.status || 500).json({
       success: false,
-      message: error.message || 'Error al procesar callback de Google',
+      message: error.message || 'Error al procesar callback de Microsoft',
       code: null
     });
     next(error);
@@ -165,9 +165,9 @@ const getGoogleCallback = async (req, res, next) => {
 };
 
 module.exports = {
-  getGoogleAuthUrl,
-  loginWithGoogle,
-  registerWithGoogle,
-  authenticateWithGoogle,
-  getGoogleCallback
+  getMicrosoftAuthUrl,
+  loginWithMicrosoft,
+  registerWithMicrosoft,
+  authenticateWithMicrosoft,
+  getMicrosoftCallback
 };
