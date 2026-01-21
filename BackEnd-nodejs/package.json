@@ -14,10 +14,11 @@
     "nodemon": "^3.1.11"
   },
   "dependencies": {
+    "@azure/msal-browser": "^5.0.2",
+    "@azure/msal-node": "^5.0.2",
+    "@azure/msal-react": "^5.0.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
-    "@azure/msal-node": "^5.0.2",
-    "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "google-auth-library": "^10.5.0",

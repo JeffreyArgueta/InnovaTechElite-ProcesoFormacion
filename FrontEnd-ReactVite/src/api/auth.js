@@ -31,12 +31,37 @@ export const getGoogleAuthUrl = async () => {
 };
 
 /**
- * Inicia sesión con Google usando el código de autorización
+ * Obtiene la URL de autorización de Microsoft
+ * @returns {Promise<string>} URL de Microsoft OAuth
+ */
+export const getMicrosoftAuthUrl = async () => {
+  const response = await fetch(`${API_BASE_URL}/auth/microsoft/url`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Error al obtener URL de Microsoft');
+  }
+
+  const data = await response.json();
+  
+  if (!data.success || !data.data.url) {
+    throw new Error('URL de Microsoft no disponible');
+  }
+
+  return data.data.url;
+};
+
+/**
+ * Autentica con Google (auto-registro si no existe)
  * @param {string} code - Código de autorización de Google
  * @returns {Promise<Object>} Datos del usuario autenticado
  */
-export const loginWithGoogle = async (code) => {
-  const response = await fetch(`${API_BASE_URL}/auth/google/login`, {
+export const authenticateWithGoogle = async (code) => {
+  const response = await fetch(`${API_BASE_URL}/auth/google/authenticate`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -48,19 +73,19 @@ export const loginWithGoogle = async (code) => {
   const data = await response.json();
 
   if (!response.ok || !data.success) {
-    throw new Error(data.message || 'Error al iniciar sesión');
+    throw new Error(data.message || 'Error al autenticar con Google');
   }
 
   return data.data.usuario;
 };
 
 /**
- * Registra un nuevo usuario con Google
- * @param {string} code - Código de autorización de Google
- * @returns {Promise<Object>} Datos del usuario registrado
+ * Autentica con Microsoft (auto-registro si no existe)
+ * @param {string} code - Código de autorización de Microsoft
+ * @returns {Promise<Object>} Datos del usuario autenticado
  */
-export const registerWithGoogle = async (code) => {
-  const response = await fetch(`${API_BASE_URL}/auth/google/register`, {
+export const authenticateWithMicrosoft = async (code) => {
+  const response = await fetch(`${API_BASE_URL}/auth/microsoft/authenticate`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -72,7 +97,7 @@ export const registerWithGoogle = async (code) => {
   const data = await response.json();
 
   if (!response.ok || !data.success) {
-    throw new Error(data.message || 'Error al registrar usuario');
+    throw new Error(data.message || 'Error al autenticar con Microsoft');
   }
 
   return data.data.usuario;
