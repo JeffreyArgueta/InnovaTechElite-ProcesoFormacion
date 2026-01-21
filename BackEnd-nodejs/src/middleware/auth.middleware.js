@@ -6,21 +6,20 @@ const authMiddleware = (req, res, next) => {
 
   if (!token) {
     return res.status(401).json({
-      estado: false,
-      mensaje: 'Acceso denegado: No se proporcionó token',
+      success: false,
+      message: 'Acceso denegado: No se proporcionó token',
       error: 'No token provided'
     });
   }
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-
-    req.user = decoded;
+    req.usuario = decoded;
     next();
   } catch (error) {
     return res.status(401).json({
-      estado: false,
-      mensaje: 'Token inválido o expirado',
+      success: false,
+      message: 'Token inválido o expirado',
       error: error.message
     });
   }

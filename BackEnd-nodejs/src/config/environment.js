@@ -9,7 +9,10 @@ const requiredEnvVars = [
   'GOOGLE_CLIENT_ID',
   'GOOGLE_CLIENT_SECRET',
   'GOOGLE_REDIRECT_URI',
-  'JWT_SECRET'
+  'JWT_SECRET',
+  'MICROSOFT_CLIENT_ID',
+  'MICROSOFT_CLIENT_SECRET',
+  'MICROSOFT_REDIRECT_URI',
 ];
 
 const missingEnvVar = requiredEnvVars.filter((envVar) => !process.env[envVar]);
@@ -26,5 +29,9 @@ module.exports = {
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   GOOGLE_REDIRECT_URI: process.env.GOOGLE_REDIRECT_URI,
-  JWT_SECRET: process.env.JWT_SECRET
+  JWT_SECRET: process.env.JWT_SECRET,
+  MICROSOFT_CLIENT_ID: process.env.MICROSOFT_CLIENT_ID,
+  MICROSOFT_CLIENT_SECRET: process.env.MICROSOFT_CLIENT_SECRET,
+  MICROSOFT_REDIRECT_URI: process.env.MICROSOFT_REDIRECT_URI,
+  MICROSOFT_TENANT_ID: process.env.MICROSOFT_TENANT_ID || 'common',
 }
