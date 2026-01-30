@@ -53,6 +53,7 @@
 }
 
 .home-usuarios-button,
+.home-ordenes-button,
 .home-logout-button {
   padding: 12px 24px;
   font-size: 16px;
@@ -72,6 +73,16 @@
   background-color: #0056b3;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+}
+
+.home-ordenes-button {
+  background-color: #28a745;
+}
+
+.home-ordenes-button:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
 }
 
 .home-logout-button {

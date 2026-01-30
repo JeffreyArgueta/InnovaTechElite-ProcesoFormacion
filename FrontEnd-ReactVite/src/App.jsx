@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import AuthCallback from './pages/AuthCallback'
 import Home from './pages/Home'
 import Usuarios from './pages/Usuarios'
+import Ordenes from './pages/Ordenes'
 
 function App() {
   return (
@@ -22,6 +23,9 @@ function App() {
       
       {/* Ruta para gestión de usuarios */}
       <Route path="/usuarios" element={<Usuarios />} />
+      
+      {/* Ruta para ver órdenes */}
+      <Route path="/ordenes" element={<Ordenes />} />
     </Routes>
   )
 }

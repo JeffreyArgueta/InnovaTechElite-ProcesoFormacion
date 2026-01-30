@@ -46,6 +46,10 @@ const Home = () => {
     navigate('/usuarios');
   };
 
+  const handleNavigateToOrdenes = () => {
+    navigate('/ordenes');
+  };
+
   return (
     <div className="home-container">
       <h1>Bienvenido a InnovaTech Elite</h1>
@@ -64,6 +68,13 @@ const Home = () => {
           className="home-usuarios-button"
         >
           Gestionar Usuarios
+        </button>
+
+        <button 
+          onClick={handleNavigateToOrdenes}
+          className="home-ordenes-button"
+        >
+          Ver Órdenes
         </button>
 
         <button 
