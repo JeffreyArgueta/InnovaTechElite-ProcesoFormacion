@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login'
 import AuthCallback from './pages/AuthCallback'
 import Home from './pages/Home'
+import Usuarios from './pages/Usuarios'
 
 function App() {
   return (
@@ -18,6 +19,9 @@ function App() {
       
       {/* Ruta protegida - página principal */}
       <Route path="/home" element={<Home />} />
+      
+      {/* Ruta para gestión de usuarios */}
+      <Route path="/usuarios" element={<Usuarios />} />
     </Routes>
   )
 }

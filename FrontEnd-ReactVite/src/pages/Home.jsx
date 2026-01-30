@@ -42,6 +42,10 @@ const Home = () => {
     return <div className="home-loading">Cargando...</div>;
   }
 
+  const handleNavigateToUsuarios = () => {
+    navigate('/usuarios');
+  };
+
   return (
     <div className="home-container">
       <h1>Bienvenido a InnovaTech Elite</h1>
@@ -54,12 +58,21 @@ const Home = () => {
         <p><strong>Estado:</strong> {user.estado ? 'Activo' : 'Inactivo'}</p>
       </div>
 
-      <button 
-        onClick={handleLogout}
-        className="home-logout-button"
-      >
-        Cerrar Sesión
-      </button>
+      <div className="home-buttons">
+        <button 
+          onClick={handleNavigateToUsuarios}
+          className="home-usuarios-button"
+        >
+          Gestionar Usuarios
+        </button>
+
+        <button 
+          onClick={handleLogout}
+          className="home-logout-button"
+        >
+          Cerrar Sesión
+        </button>
+      </div>
     </div>
   );
 };
